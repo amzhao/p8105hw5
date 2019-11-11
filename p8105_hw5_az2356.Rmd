@@ -12,6 +12,7 @@ output: github_document
 
 ```{r}
 library(tidyverse)
+library(purrr)
 
 set.seed(10)
 
@@ -26,6 +27,7 @@ fill_na = function(x) {
       round(mean(x, na.rm = TRUE, 2)))}
   if (is.character(x) == TRUE) {
     x = x %>% replace_na("virginica")}
+  
 return(x)
 }
 
@@ -35,6 +37,48 @@ iris_with_missing = map_df(iris_with_missing, fill_na)
 
 
 # Problem 2. 
+
+
+```{r}
+"./data"
+
+lookatdata <-
+  read_csv("data/exp_07.csv")
+
+studydata <-
+  list.files(path = "./data", full.names = TRUE) %>% 
+  map(read.csv) %>% 
+  reduce(rbind) %>% 
+  mutate(
+    studyid = c(1:20),
+    studygrp = ifelse(
+      studyid == c(1:10), "control", "experimental"
+    )
+  ) %>% 
+  janitor::clean_names()
+
+longdata <-
+  studydata %>% 
+  pivot_longer(week_1:week_8) %>% 
+  rename("week" = name) %>% 
+  mutate(
+    week = str_replace(week, "week_", "")
+  )
+  
+
+ggplot(data = longdata, aes(x = week, y = value, group = studyid, colour = studygrp)) + geom_line() + labs(
+  title = "Figure 1. Values over time for each study participant",
+  x = "Week",
+  y = "Value") 
+
+```
+
+From Figure 1, we can see that the observed values for the experimental group seem to be generally higher than those in the control group, particularly during the later weeks of the study, when there is no overlap between the study arms at all. 
+
+
+
+
+
 
 
 
