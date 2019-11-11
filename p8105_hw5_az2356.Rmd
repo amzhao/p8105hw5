@@ -6,6 +6,10 @@ output: github_document
 
 ---
 
+# This is my markdown file for Homework 5. 
+
+# Problem 1: 
+
 ```{r}
 library(tidyverse)
 
@@ -14,8 +18,6 @@ set.seed(10)
 iris_with_missing = iris %>% 
   map_df(~replace(.x, sample(1:150, 20), NA)) %>%
   mutate(Species = as.character(Species)) 
- 
-irisdata <- iris_with_missing
 
 
 fill_na = function(x) {
@@ -27,12 +29,12 @@ fill_na = function(x) {
 return(x)
 }
 
-irisdata = map_df(irisdata, fill_na)
-
-  
+iris_with_missing = map_df(iris_with_missing, fill_na)
 
 ```
 
+
+# Problem 2. 
 
 
 
